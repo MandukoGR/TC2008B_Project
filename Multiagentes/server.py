@@ -7,12 +7,12 @@ import logging
 import json
 
 class Server(BaseHTTPRequestHandler):
-
+    
     def _set_response(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-
+        
     def do_GET(self):
         logging.info("GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers))
         self._set_response()
