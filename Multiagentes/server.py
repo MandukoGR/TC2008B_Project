@@ -1,63 +1,72 @@
-# TC2008B Modelación de Sistemas Multiagentes con gráficas computacionales
-# Python server to interact with Unity via POST
-# Sergio Ruiz-Loza, Ph.D. March 2021
+""" Importamos el modelo del archivo en que lo definimos. """
+from initialSimulation import HighwayModel
+from initialSimulation import getGrid
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import logging
-import json
+""" Importamos los siguientes paquetes para el mejor manejo de valores numéricos."""
+import numpy as np
+import pandas as pd
+import random
 
-class Server(BaseHTTPRequestHandler):
+""" Definimos otros paquetes que vamos a usar para medir el tiempo de ejecución de nuestro algoritmo. """
+import time
+import datetime
 
-    def _set_response(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+""" Para coneccion con IBM """
+from flask import Flask, render_template, request, jsonify
+import json, logging, os, atexit
 
-    def do_GET(self):
-        logging.info("GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers))
-        self._set_response()
-        self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
+#Información de la simulación
+MAX_ITER = 300
+WIDTH = 3
+HEIGHT = 183
 
-    def do_POST(self):
-        content_length = int(self.headers['Content-Length'])
-        #post_data = self.rfile.read(content_length)
-        post_data = json.loads(self.rfile.read(content_length))
-        #logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-                     #str(self.path), str(self.headers), post_data.decode('utf-8'))
-        logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-                     str(self.path), str(self.headers), json.dumps(post_data))
-        
-        x = post_data['x'] * 2
-        y = post_data['y'] * 2
-        z = post_data['z'] * 2
-        
-        position = {
-            "x" : x,
-            "y" : y,
-            "z" : z
+#Iniciar el modelo
+model = HighwayModel(WIDTH,HEIGHT)
+
+def updatePositions():
+    global model
+    positions = []
+    model.step()
+    matrix = np.array(getGrid(model))
+    #print(matrix)
+    for x in range(WIDTH):
+        for z in range(HEIGHT):
+            if (matrix[x, z] != 0):
+                pos = [x, z, 0, matrix[x, z]]
+                positions.append(pos)
+                #print(positions)
+    return positions
+
+def positionsToJSON(ps):
+    posDICT = []
+    for p in ps:
+        pos = {
+            "x" : p[0],
+            "z" : p[1],
+            "y" : p[2],
+            "val" : p[3]
         }
+        posDICT.append(pos)
+        #print(json.dumps(posDICT))
+    return json.dumps(posDICT)
 
-        self._set_response()
-        #self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
-        self.wfile.write(str(position).encode('utf-8'))
+app = Flask(__name__, static_url_path='')
 
+port = int(os.getenv('PORT', 8585))
 
-def run(server_class=HTTPServer, handler_class=Server, port=8585):
-    logging.basicConfig(level=logging.INFO)
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    logging.info("Starting httpd...\n") # HTTPD is HTTP Daemon!
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:   # CTRL+C stops the server
-        pass
-    httpd.server_close()
-    logging.info("Stopping httpd...\n")
+@app.route('/', methods=['GET'])
+def root():
+    resp = "Inicio exitoso del server"
+    return resp
+
+@app.route('/step', methods=['GET'])
+def modelStep():
+    positions = updatePositions()
+    resp = "{\"data\":" + positionsToJSON(positions) + "}"
+    print(model.movimientos)
+    return resp
 
 if __name__ == '__main__':
-    from sys import argv
-    
-    if len(argv) == 2:
-        run(port=int(argv[1]))
-    else:
-        run()
+    app.run(host='127.0.0.1', port=port, debug=True)
+
+#Para ejecutar: flask --app server.py --debug run
