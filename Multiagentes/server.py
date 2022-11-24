@@ -25,7 +25,6 @@ model = HighwayModel(WIDTH,HEIGHT)
 
 def updatePositions():
     global model
-    global ACTUAL
     positions = []
     model.step()
     matrix = np.array(getGrid(model))
