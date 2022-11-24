@@ -29,10 +29,7 @@ def getGrid(model):
         if model.grid.is_cell_empty((x,y)):
             grid[x][y] = 0
         else:
-            if content.functional == 1:
-                grid[x][y] = 0.2
-            else:
-                grid[x][y] = 1 #Auto descompuesto
+            grid[x][y] = content.unique_id
     return grid
 
 
