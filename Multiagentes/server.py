@@ -64,6 +64,7 @@ def root():
 def modelStep():
     positions = updatePositions()
     resp = "{\"data\":" + positionsToJSON(positions) + "}"
+    print(model.movimientos)
     return resp
 
 if __name__ == '__main__':
