@@ -29,13 +29,13 @@ def updatePositions():
     positions = []
     model.step()
     matrix = np.array(getGrid(model))
-    print(matrix)
+    #print(matrix)
     for x in range(WIDTH):
-        for y in range(HEIGHT):
-            if (matrix[x, y] != 0):
-                pos = [x, y, 0, matrix[x, y]]
+        for z in range(HEIGHT):
+            if (matrix[x, z] != 0):
+                pos = [x, z, 0, matrix[x, z]]
                 positions.append(pos)
-                print(positions)
+                #print(positions)
     return positions
 
 def positionsToJSON(ps):
@@ -48,20 +48,19 @@ def positionsToJSON(ps):
             "val" : p[3]
         }
         posDICT.append(pos)
-        print(json.dumps(posDICT))
+        #print(json.dumps(posDICT))
     return json.dumps(posDICT)
 
 app = Flask(__name__, static_url_path='')
 
-port = int(os.getenv('PORT', 5000))
+port = int(os.getenv('PORT', 8585))
 
 @app.route('/', methods=['GET'])
 def root():
-    positions = updatePositions()
     resp = "Inicio exitoso del server"
     return resp
 
-@app.route('/run', methods=['GET'])
+@app.route('/step', methods=['GET'])
 def modelStep():
     positions = updatePositions()
     resp = "{\"data\":" + positionsToJSON(positions) + "}"
