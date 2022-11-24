@@ -53,21 +53,21 @@ def positionsToJSON(ps):
 
 app = Flask(__name__, static_url_path='')
 
-port = int(os.getenv('PORT', 8585))
+port = int(os.getenv('PORT', 5000))
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET'])
 def root():
     positions = updatePositions()
     resp = "Inicio exitoso del server"
     return resp
 
 @app.route('/run', methods=['POST'])
-def root():
+def modelStep():
     positions = updatePositions()
     resp = "{\"data\":" + positionsToJSON(positions) + "}"
     return resp
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='127.0.0.1', port=port, debug=True)
 
 #Para ejecutar: python -m flask --app server run
