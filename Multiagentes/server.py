@@ -61,7 +61,7 @@ def root():
     resp = "Inicio exitoso del server"
     return resp
 
-@app.route('/run', methods=['POST'])
+@app.route('/run', methods=['GET'])
 def modelStep():
     positions = updatePositions()
     resp = "{\"data\":" + positionsToJSON(positions) + "}"
