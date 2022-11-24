@@ -69,4 +69,4 @@ def modelStep():
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=port, debug=True)
 
-#Para ejecutar: python -m flask --app server run
+#Para ejecutar: flask --app server.py --debug run
