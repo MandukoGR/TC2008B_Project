@@ -37,6 +37,18 @@ def updatePositions():
                 #print(positions)
     return positions
 
+def getPositionById(id, ps):
+    # get the position with higher value in z and where value = id
+    maxZ = 0
+    pos = None
+    for p in ps:
+        print(p[3])
+        if p[3] == id and p[1] > maxZ:
+            maxZ = p[1]
+            pos = p
+    return pos
+
+
 def positionsToJSON(ps):
     posDICT = []
     for p in ps:
@@ -61,10 +73,19 @@ def root():
 
 @app.route('/step', methods=['GET'])
 def modelStep():
-    positions = updatePositions()
-    resp = "{\"data\":" + positionsToJSON(positions) + "}"
-    print(model.movimientos)
+    args = request.args
+    id = args.get('id')
+    id = float(id)
+    ps = updatePositions()
+    pos = getPositionById(id, ps)
+    if pos is not None:
+        pos = positionsToJSON([pos])
+        return pos
+    else:
+         resp =  "{\"data\":" + positionsToJSON(ps) + "}"
     return resp
+
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=port, debug=True)
