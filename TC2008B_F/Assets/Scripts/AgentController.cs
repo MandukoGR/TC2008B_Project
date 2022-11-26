@@ -30,7 +30,7 @@ public class AgentController : MonoBehaviour
     
     IEnumerator GetDataCoroutine(){
         // Wait 5 seconds before doing a request
-        string uri = "http://localhost:8585/step?id=" + id;
+        string uri = "http://localhost:8585/position?id=" + id;
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             // Wait 1 second
