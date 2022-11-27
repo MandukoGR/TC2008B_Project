@@ -28,14 +28,11 @@ public class AgentController : MonoBehaviour
     {
         StartCoroutine(GetDataCoroutine());
     }
-    
 
     IEnumerator GetDataCoroutine(){
-        // Wait 5 seconds before doing a request
         string uri = "http://localhost:5000/position?id=" + id;
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
-            // Wait 1 second
             yield return www.SendWebRequest();
             if(www.isNetworkError || www.isHttpError)
             {
@@ -44,9 +41,7 @@ public class AgentController : MonoBehaviour
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
                 position = www.downloadHandler.text;
-
                 var charsToRemove = new string[] {"[","{",":","x","z","}","]"," "};
                 foreach (var c in charsToRemove)
                 {
@@ -63,10 +58,6 @@ public class AgentController : MonoBehaviour
                     coordinatesInt.Add(numVal);
                 }
 
-                /*Debug.Log("Elementos de la lista");
-                Debug.Log(coordinatesInt[0]);
-                Debug.Log(coordinatesInt[1]);*/
-
                 //Desparecer carrito - no funcional por el momento
                 /*if (coordinatesInt[1] >= 180)
                 {
@@ -79,7 +70,7 @@ public class AgentController : MonoBehaviour
                 float timeToMove = 1;
                 while (timeElapsed < timeToMove)
                 {
-                    transform.position = Vector3.Lerp(currentPos, targetPos, timeElapsed / timeToMove);
+                    transform.position = Vector3.Lerp(currentPos, targetPos, (timeElapsed / timeToMove));
                     timeElapsed += Time.deltaTime;
                     yield return null;
                 }
