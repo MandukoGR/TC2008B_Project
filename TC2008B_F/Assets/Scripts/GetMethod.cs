@@ -7,8 +7,9 @@ using TMPro;
 public class GetMethod : MonoBehaviour
 {
     // Start is called before the first frame update
-   public TextMeshProUGUI text;
-   public int id;
+    public TextMeshProUGUI text;
+    public int id;
+
     void Start()
     {
         Invoke("InitialRequest",1f);
@@ -18,9 +19,7 @@ public class GetMethod : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // Invoke GetData every second
-
-         
+        // Invoke GetData every second
     }
 
 
@@ -28,10 +27,10 @@ public class GetMethod : MonoBehaviour
     {
         StartCoroutine(GetDataCoroutine());
     }
-    
+
     IEnumerator GetDataCoroutine(){
         // Wait 5 seconds before doing a request
-        string uri = "http://localhost:8585/step";
+        string uri = "http://localhost:5000/step";
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             // Wait 1 second
@@ -61,11 +60,10 @@ public class GetMethod : MonoBehaviour
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
+                //Debug.Log(www.downloadHandler.text);
             }
         }
     }
 
-    
-}
 
+}

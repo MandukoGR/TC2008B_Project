@@ -61,6 +61,17 @@ def positionsToJSON(ps):
         #print(json.dumps(posDICT))
     return json.dumps(posDICT)
 
+def positionsToJSONById(ps):
+    posDICT = []
+    for p in ps:
+        pos = {
+            "x" : p[0],
+            "z" : p[1]
+        }
+        posDICT.append(pos)
+        #print(json.dumps(posDICT))
+    return json.dumps(posDICT)
+
 app = Flask(__name__, static_url_path='')
 
 port = int(os.getenv('PORT', 8585))
@@ -78,7 +89,7 @@ def modelPosition():
         id = float(id)
         pos = getPositionById(id, POSITIONS)
         if pos is not None:
-            pos = positionsToJSON([pos])
+            pos = positionsToJSONById([pos])
             return pos
         else:
             resp = "Agente llego a final"
@@ -94,8 +105,6 @@ def modelStep():
     resp = "{\"data\":" + positionsToJSON(POSITIONS) + "}"
     print(model.movimientos)
     return resp
-
-
 
 
 if __name__ == '__main__':
