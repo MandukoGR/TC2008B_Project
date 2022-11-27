@@ -14,7 +14,7 @@ public class AgentController : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("GetData", 1f, 1f);
+        InvokeRepeating("GetAgentData", 1f, 1f);
     }
 
     // Update is called once per frame
@@ -23,13 +23,12 @@ public class AgentController : MonoBehaviour
         // Invoke GetData every second
     }
 
-
-    void GetData ()
+    void GetAgentData()
     {
-        StartCoroutine(GetDataCoroutine());
+        StartCoroutine(GetAgentDataCoroutine());
     }
 
-    IEnumerator GetDataCoroutine(){
+    IEnumerator GetAgentDataCoroutine(){
         string uri = "http://localhost:5000/position?id=" + id;
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
@@ -50,27 +49,27 @@ public class AgentController : MonoBehaviour
                 string[] coordinatesString = position.Split(",");
                 string tempVar;
                 float numVal;
-                List<float> coordinatesInt = new List<float>();
+                List<float> coordinatesFloat = new List<float>();
                 for (int i = 0; i < 2; i++)
                 {
                     tempVar = coordinatesString[i].Remove(0,2);
                     numVal = float.Parse(tempVar, CultureInfo.InvariantCulture.NumberFormat);
-                    coordinatesInt.Add(numVal);
+                    coordinatesFloat.Add(numVal);
                 }
 
-                //Desparecer carrito - no funcional por el momento
-                /*if (coordinatesInt[1] >= 180)
+                //Desparecer agente
+                if (coordinatesFloat[1] >= 180)
                 {
-                    carAgent.SetActive(false);
-                }*/
+                    Destroy(gameObject);
+                }
 
                 Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-                Vector3 targetPos = new Vector3(coordinatesInt[0],5.81f,coordinatesInt[1]);
+                Vector3 targetPos = new Vector3(coordinatesFloat[0],5.81f, coordinatesFloat[1]);
                 float timeElapsed = 0;
-                float timeToMove = 1;
+                float timeToMove = 0.5f;
                 while (timeElapsed < timeToMove)
                 {
-                    transform.position = Vector3.Lerp(currentPos, targetPos, (timeElapsed / timeToMove));
+                    transform.position = Vector3.Lerp(currentPos, targetPos, timeElapsed / timeToMove);
                     timeElapsed += Time.deltaTime;
                     yield return null;
                 }

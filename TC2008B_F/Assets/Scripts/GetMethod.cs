@@ -31,6 +31,7 @@ public class GetMethod : MonoBehaviour
     void GetData ()
     {
         StartCoroutine(GetDataCoroutine());
+        StartCoroutine(GenerateAgentCoroutine());
     }
 
 
@@ -69,12 +70,22 @@ public class GetMethod : MonoBehaviour
             {
                 //Debug.Log(www.downloadHandler.text);
                 // text.text = www.downloadHandler.text;
-                Debug.Log("Generando agente num: " + actualId);
+                /*Debug.Log("Generando agente num: " + actualId);
                 Instantiate(carAgent, initialPosition.position, initialPosition.rotation);
                 car = carAgent.GetComponent<AgentController>();
                 car.id = actualId;
-                actualId++;
+                actualId++;*/
             }
         }
+    }
+
+    IEnumerator GenerateAgentCoroutine()
+    {
+        Debug.Log("Generando agente num: " + actualId);
+        Instantiate(carAgent, initialPosition.position, initialPosition.rotation);
+        car = carAgent.GetComponent<AgentController>();
+        car.id = actualId;
+        actualId++;
+        yield return null;
     }
 }
