@@ -10,7 +10,6 @@ public class AgentController : MonoBehaviour
     // Start is called before the first frame update
     public int id;
     public string position;
-    //public pastCoordinates = new Vector3(1.0f, 5.81f, 0.0f);
 
     void Start()
     {
@@ -67,14 +66,16 @@ public class AgentController : MonoBehaviour
                 Debug.Log(coordinatesInt[0]);
                 Debug.Log(coordinatesInt[1]);
 
-                /*
-                transform.position = pastCoordinates;
+                Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
                 Vector3 targetPos = new Vector3(coordinatesInt[0], 5.81f ,coordinatesInt[1]);
-
-                Vector3 currentPos = transform.position;
-
                 float timeElapsed = 0;
-                float timeToMove = 3;*/
+                float timeToMove = 3;
+                while (timeElapsed < timeToMove)
+                {
+                    transform.position = Vector3.Lerp(currentPos, targetPos, timeElapsed / timeToMove);
+                    timeElapsed += Time.deltaTime;
+                    yield return null;
+                }
 
 
             }
