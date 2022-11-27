@@ -10,6 +10,7 @@ public class AgentController : MonoBehaviour
     // Start is called before the first frame update
     public int id;
     public string position;
+    //public GameObject carAgent;
 
     void Start()
     {
@@ -62,14 +63,20 @@ public class AgentController : MonoBehaviour
                     coordinatesInt.Add(numVal);
                 }
 
-                Debug.Log("Elementos de la lista");
+                /*Debug.Log("Elementos de la lista");
                 Debug.Log(coordinatesInt[0]);
-                Debug.Log(coordinatesInt[1]);
+                Debug.Log(coordinatesInt[1]);*/
+
+                //Desparecer carrito - no funcional por el momento
+                /*if (coordinatesInt[1] >= 180)
+                {
+                    carAgent.SetActive(false);
+                }*/
 
                 Vector3 currentPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-                Vector3 targetPos = new Vector3(coordinatesInt[0], 5.81f ,coordinatesInt[1]);
+                Vector3 targetPos = new Vector3(coordinatesInt[0],5.81f,coordinatesInt[1]);
                 float timeElapsed = 0;
-                float timeToMove = 3;
+                float timeToMove = 1;
                 while (timeElapsed < timeToMove)
                 {
                     transform.position = Vector3.Lerp(currentPos, targetPos, timeElapsed / timeToMove);
