@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Globalization;
 
 public class AgentController : MonoBehaviour
 {
     // Start is called before the first frame update
     public int id;
     public string position;
+    //public pastCoordinates = new Vector3(1.0f, 5.81f, 0.0f);
 
     void Start()
     {
@@ -50,27 +52,31 @@ public class AgentController : MonoBehaviour
                 {
                     position = position.Replace(c, string.Empty);
                 }
-                //Debug.Log(position);
-
                 string[] coordinatesString = position.Split(",");
-                /*foreach (string coordinate in coordinatesString)
-                {
-                    Debug.Log(coordinate);
-                }*/
-
                 string tempVar;
-                int numVal;
-                List<int> coordinatesInt = new List<int>();
+                float numVal;
+                List<float> coordinatesInt = new List<float>();
                 for (int i = 0; i < 2; i++)
                 {
                     tempVar = coordinatesString[i].Remove(0,2);
-                    numVal = Int32.Parse(tempVar);
+                    numVal = float.Parse(tempVar, CultureInfo.InvariantCulture.NumberFormat);
                     coordinatesInt.Add(numVal);
                 }
 
                 Debug.Log("Elementos de la lista");
                 Debug.Log(coordinatesInt[0]);
                 Debug.Log(coordinatesInt[1]);
+
+                /*
+                transform.position = pastCoordinates;
+                Vector3 targetPos = new Vector3(coordinatesInt[0], 5.81f ,coordinatesInt[1]);
+
+                Vector3 currentPos = transform.position;
+
+                float timeElapsed = 0;
+                float timeToMove = 3;*/
+
+
             }
         }
     }
