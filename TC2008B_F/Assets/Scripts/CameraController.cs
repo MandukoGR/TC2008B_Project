@@ -56,7 +56,7 @@ public class CameraController : MonoBehaviour
             cam4.SetActive(true);
             cam5.SetActive(false);
         }
-        if (Input.GetButtonDown("Switch4"))
+        if (Input.GetButtonDown("Switch5"))
         {
             cam1.SetActive(false);
             cam2.SetActive(false);
