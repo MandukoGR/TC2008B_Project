@@ -71,7 +71,7 @@ public class AgentController : MonoBehaviour
 
                 // Move car
                 Vector3 currentPosition = transform.position;
-                Vector3 targetPos = new Vector3(positionX, 5.81f, positionZ);
+                Vector3 targetPos = new Vector3(positionX , 5.81f, positionZ);
                  // Move using Lerp
                 float timeElapsed = 0;
                 float timeToMove = 1f;
