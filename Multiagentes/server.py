@@ -19,13 +19,13 @@ import json, logging, os, atexit
 MAX_ITER = 300
 WIDTH = 3
 HEIGHT = 183
+POSITIONS = []
 
 #Iniciar el modelo
 model = HighwayModel(WIDTH,HEIGHT)
 
 def updatePositions():
     global model
-    positions = []
     model.step()
     matrix = np.array(getGrid(model))
     #print(matrix)
@@ -33,9 +33,21 @@ def updatePositions():
         for z in range(HEIGHT):
             if (matrix[x, z] != 0):
                 pos = [x, z, 0, matrix[x, z]]
-                positions.append(pos)
+                POSITIONS.append(pos)
                 #print(positions)
-    return positions
+
+
+def getPositionById(id, ps):
+    # get the position with higher value in z and where value = id
+    maxZ = 0
+    pos = None
+    for p in ps:
+        if p[3] == id and p[1] > maxZ:
+            maxZ = p[1]
+            pos = p
+    
+    return pos
+
 
 def positionsToJSON(ps):
     posDICT = []
@@ -59,12 +71,33 @@ def root():
     resp = "Inicio exitoso del server"
     return resp
 
+@app.route('/position', methods=['GET'])
+def modelPosition():
+    args = request.args
+    id = args.get('id')
+    if id is not None:
+        id = float(id)
+        pos = getPositionById(id, POSITIONS)
+        if pos is not None:
+            pos = positionsToJSON([pos])
+            return pos
+        else:
+            resp = "Agente llego a final"
+        return resp
+    else:
+        resp = "No se ingreso id"
+        return resp
+
 @app.route('/step', methods=['GET'])
 def modelStep():
-    positions = updatePositions()
-    resp = "{\"data\":" + positionsToJSON(positions) + "}"
+    updatePositions()
+    modelPosition()
+    resp = "{\"data\":" + positionsToJSON(POSITIONS) + "}"
     print(model.movimientos)
     return resp
+
+
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=port, debug=True)

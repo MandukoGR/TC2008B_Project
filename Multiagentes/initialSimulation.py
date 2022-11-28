@@ -43,6 +43,7 @@ class VehicleAgent(Agent):
         self.speed = 3
         self.lane = initialLane
         self.functional = fullyFunctional
+        self.changedLane = False
     # 0 es x // 1 es y
     def getFrontEmptySpaces(self):
         # Get front empty spaces
@@ -86,6 +87,13 @@ class VehicleAgent(Agent):
         self.lane = laneToChange[0]
         #Move again
         self.step()
+    
+    def returnToLane(self):
+        # Return to lane
+        self.model.grid.move_agent(self,(1,self.pos[1]))
+        self.changedLane = False
+        #Move again
+        self.step()
     def step(self):
         if  self.functional==0 and self.pos[1] == 90:
             self.speed = 0
@@ -93,6 +101,10 @@ class VehicleAgent(Agent):
         frontEmptySpaces = self.getFrontEmptySpaces()
         # Get front vehicle
         frontVehicle = self.getFrontVehicle()
+        #print("Iniciando el step del auto:", self.unique_id)
+        if self.changedLane== True and self.pos[1] > 90:
+            # Return to lane
+            self.returnToLane()
         if frontVehicle is not None:
             #1 o 2 espacios disponibles en la linea central
             if frontEmptySpaces == 2 or frontEmptySpaces == 1:
@@ -103,6 +115,7 @@ class VehicleAgent(Agent):
                     #Si se puede cambiar cambiarse 
                     if laneToChange != self.pos:
                         self.changeLane(laneToChange)
+                        self.changedLane = True
                     #Caso contrario reducir la velocidad para poder esperar
                     else:
                         self.speed = 1
@@ -115,6 +128,7 @@ class VehicleAgent(Agent):
                     laneToChange = self.whereToChange()
                     if laneToChange != self.pos:
                         self.changeLane(laneToChange)
+                        self.changedLane = True
                     #Si no se puede cambiar cambiar velocidad a 0 (detener el vehiculo)
                     else:
                         self.speed = 0
