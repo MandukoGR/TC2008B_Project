@@ -23,7 +23,7 @@ public class CarsManager : MonoBehaviour
     void InstantiateCar(){
         carPrefab.GetComponent<AgentController>().id = id;
         id++;
-        Instantiate(carPrefab, new Vector3(0, 0, -10), Quaternion.identity);
+        Instantiate(carPrefab, new Vector3(0, 5.81f, 0), Quaternion.identity);
     }
 
 }

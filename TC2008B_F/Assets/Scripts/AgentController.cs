@@ -64,12 +64,24 @@ public class AgentController : MonoBehaviour
                 // Debug.Log(positionZ);
 
               
-                if (positionX == 183){
+                if (positionZ == 180){
                     Destroy(gameObject);
                 }
 
+
                 // Move car
-                transform.position = new Vector3(positionX, 5.81f, positionZ);
+                Vector3 currentPosition = transform.position;
+                Vector3 targetPos = new Vector3(positionX, 5.81f, positionZ);
+                 // Move using Lerp
+                float timeElapsed = 0;
+                float timeToMove = 1f;
+                while (timeElapsed < timeToMove)
+                {
+                    transform.position = Vector3.Lerp(currentPosition, targetPos, timeElapsed / timeToMove);
+                    timeElapsed += Time.deltaTime;
+                    yield return null;
+                }
+                
 
                 // [{"x": 0, "z": 9, "y": 0, "val": 2.0}]
             }
