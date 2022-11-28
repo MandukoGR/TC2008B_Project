@@ -45,6 +45,7 @@ def getPositionById(id, ps):
         if p[3] == id and p[1] > maxZ:
             maxZ = p[1]
             pos = p
+    
     return pos
 
 

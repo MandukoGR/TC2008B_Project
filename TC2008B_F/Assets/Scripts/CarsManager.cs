@@ -11,8 +11,7 @@ public class CarsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("InitialRequest", 1f);
-        InvokeRepeating("InstantiateCar", 1f, 1f);
+        InvokeRepeating("InstantiateCar", 2f, 1f);
     }
 
     // Update is called once per frame
@@ -24,21 +23,7 @@ public class CarsManager : MonoBehaviour
     void InstantiateCar(){
         carPrefab.GetComponent<AgentController>().id = id;
         id++;
+        Instantiate(carPrefab, new Vector3(0, 0, -10), Quaternion.identity);
     }
 
-    IEnumerator InitialRequest(){
-        string uri = "http://localhost:8585/step";
-        using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        {
-            yield return www.SendWebRequest();
-            if(www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log(www.downloadHandler.text);
-            }
-        }
-    }
 }

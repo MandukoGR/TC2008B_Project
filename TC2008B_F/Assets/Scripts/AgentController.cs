@@ -39,11 +39,39 @@ public class AgentController : MonoBehaviour
             {
                 Debug.Log(www.error);
                 position = www.error;
+               
+
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
+                // Debug.Log(www.downloadHandler.text);
                 position= www.downloadHandler.text;
+                position = position.TrimStart('[');
+                position = position.TrimEnd(']');
+                
+                // Only get x from position
+                string[] positionArray = position.Split(',');
+                string x = positionArray[0];
+                x= x.TrimStart('{', '"', 'x', '"', ':');
+                x= x.TrimEnd(' ');
+                int positionX = int.Parse(x);
+                Debug.Log(positionX);
+
+                string z = positionArray[1];
+                z= z.TrimStart(' ','"', 'z', '"', ':');
+                z= z.TrimEnd(' ');
+                int positionZ = int.Parse(z);
+                // Debug.Log(positionZ);
+
+              
+                if (positionX == 183){
+                    Destroy(gameObject);
+                }
+
+                // Move car
+                transform.position = new Vector3(positionX, 5.81f, positionZ);
+
+                // [{"x": 0, "z": 9, "y": 0, "val": 2.0}]
             }
         }
     }

@@ -12,6 +12,7 @@ public class GetMethod : MonoBehaviour
     void Start()
     {
         Invoke("InitialRequest",1f);
+        Invoke("InitialRequest",1f);
         InvokeRepeating("GetData", 1f, 1f);
     }
 
@@ -43,7 +44,7 @@ public class GetMethod : MonoBehaviour
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
+                // Debug.Log(www.downloadHandler.text);
                 // text.text = www.downloadHandler.text;
             }
         }
