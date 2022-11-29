@@ -4,16 +4,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 
-public class GetMethod : MonoBehaviour
+public class GetSpeedMethod : MonoBehaviour
 {
     // Start is called before the first frame update
    public TextMeshProUGUI text;
    public int id;
     void Start()
     {
-        Invoke("InitialRequest",1f);
-        Invoke("InitialRequest",1f);
-        InvokeRepeating("GetData", 1f, 1f);
+        InvokeRepeating("GetData", 3f, 1.1f);
     }
 
     // Update is called once per frame
@@ -32,7 +30,7 @@ public class GetMethod : MonoBehaviour
     
     IEnumerator GetDataCoroutine(){
         // Wait 5 seconds before doing a request
-        string uri = "http://localhost:8585/step";
+        string uri = "http://localhost:8585/speed";
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             // Wait 1 second
@@ -40,32 +38,21 @@ public class GetMethod : MonoBehaviour
             if(www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
-                // text.text = www.error;
+                text.text = www.error;
             }
             else
             {
                 // Debug.Log(www.downloadHandler.text);
-                // text.text = www.downloadHandler.text;
+                string speed = www.downloadHandler.text;
+                speed = speed.TrimStart('{', '"', 'd', 'a', 't', 'a', '"', ':');
+                speed = speed.TrimEnd('}');
+                float speedFloat = float.Parse(speed);
+                speedFloat = speedFloat * 5.5f;
+                text.text = speedFloat.ToString() + " m/s";
             }
         }
     }
 
-    IEnumerator InitialRequest(){
-        string uri = "http://localhost:8585/step";
-        // wait 1 second
-        using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        {
-            yield return www.SendWebRequest();
-            if(www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log(www.downloadHandler.text);
-            }
-        }
-    }
     
 
     

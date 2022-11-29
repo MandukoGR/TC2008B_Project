@@ -9,8 +9,10 @@ public class AgentController : MonoBehaviour
     // Start is called before the first frame update
    public int id;
    public string position;
+   public GameObject carsManager;
     void Start()
     {
+        carsManager = GameObject.Find("CarManager");
         InvokeRepeating("GetData", 1f, 0.99f);
     }
 
@@ -66,12 +68,16 @@ public class AgentController : MonoBehaviour
               
                 if (positionZ == 180){
                     Destroy(gameObject);
+                    carsManager.GetComponent<CarsManager>().agentCounter--;
+                    
                 }
 
 
                 // Move car
                 Vector3 currentPosition = transform.position;
                 Vector3 targetPos = new Vector3(positionX , 5.81f, positionZ);
+
+               
                  // Move using Lerp
                 float timeElapsed = 0;
                 float timeToMove = 1f;

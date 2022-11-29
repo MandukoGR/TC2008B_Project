@@ -1,7 +1,6 @@
 """ Importamos el modelo del archivo en que lo definimos. """
-from secondSimulation import HighwayModel
-from secondSimulation import getGrid
-
+from initialSimulation import HighwayModel
+from initialSimulation import getGrid
 """ Importamos los siguientes paquetes para el mejor manejo de valores numéricos."""
 import numpy as np
 import pandas as pd
@@ -37,6 +36,7 @@ def updatePositions():
                 #print(positions)
 
 
+
 def getPositionById(id, ps):
     # get the position with higher value in z and where value = id
     maxZ = 0
@@ -47,6 +47,14 @@ def getPositionById(id, ps):
             pos = p
     
     return pos
+
+def getMeanSpeed():
+    global model
+    meanSpeed = 0
+    for agent in model.schedule.agents:
+        meanSpeed += agent.speed
+    meanSpeed = meanSpeed / len(model.schedule.agents)
+    return meanSpeed
 
 
 def positionsToJSON(ps):
@@ -95,6 +103,13 @@ def modelStep():
     resp = "{\"data\":" + positionsToJSON(POSITIONS) + "}"
     print(model.movimientos)
     return resp
+
+@app.route('/speed', methods=['GET'])
+def modelSpeed():
+    speed = getMeanSpeed()
+    resp = "{\"data\":" + str(speed) + "}"
+    return resp
+   
 
 
 

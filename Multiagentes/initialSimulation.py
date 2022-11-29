@@ -30,6 +30,7 @@ def getGrid(model):
             grid[x][y] = 0
         else:
             grid[x][y] = content.unique_id
+            
     return grid
 
 
