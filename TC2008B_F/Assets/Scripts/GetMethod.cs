@@ -13,7 +13,7 @@ public class GetMethod : MonoBehaviour
     {
         Invoke("InitialRequest",1f);
         Invoke("InitialRequest",1f);
-        InvokeRepeating("GetData", 1f, 0.9f);
+        InvokeRepeating("GetData", 1f, 1f);
     }
 
     // Update is called once per frame

@@ -11,7 +11,7 @@ public class AgentController : MonoBehaviour
    public string position;
     void Start()
     {
-        InvokeRepeating("GetData", 1f, 1f);
+        InvokeRepeating("GetData", 1f, 0.99f);
     }
 
     // Update is called once per frame

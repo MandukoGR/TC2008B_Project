@@ -1,6 +1,6 @@
 """ Importamos el modelo del archivo en que lo definimos. """
-from initialSimulation import HighwayModel
-from initialSimulation import getGrid
+from secondSimulation import HighwayModel
+from secondSimulation import getGrid
 
 """ Importamos los siguientes paquetes para el mejor manejo de valores numéricos."""
 import numpy as np
