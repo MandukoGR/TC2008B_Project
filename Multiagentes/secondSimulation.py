@@ -138,7 +138,7 @@ class VehicleAgent(Agent):
                     else:
                         self.speed = 1
                 #Si no esta en el carril central que tome la velocidad del auto de adelante
-                elif self.lane == 2 or self.lane == 3:
+                elif self.lane == 0 or self.lane == 2:
                     self.speed = frontVehicle.speed
             #0 espacios disponibles en la linea central
             if frontEmptySpaces == 0:
