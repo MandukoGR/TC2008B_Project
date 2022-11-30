@@ -5,7 +5,7 @@ from mesa import Agent, Model
 # Debido a que necesitamos que existe un solo agente por celda, elegimos ''SingleGrid''.
 from mesa.space import SingleGrid
 
-# Con ''SimultaneousActivation, hacemos que todos los agentes se activen ''al mismo tiempo''.
+# Con 'BaseScheduler'cada agente se activa cuando es su turno.
 from mesa.time import BaseScheduler
 
 # Haremos uso de ''DataCollector'' para obtener información de cada paso de la simulación.
@@ -22,6 +22,11 @@ import datetime
 
 ##--------------------------------------------------------------------------------------------------
 
+"""
+@brief: Función que genera grid
+@param: model: modelo (HighwayModel)
+@return: grid: grid
+"""
 
 def getGrid(model):
     grid = np.zeros( (model.grid.width, model.grid.height) )
@@ -35,6 +40,25 @@ def getGrid(model):
 
 ##--------------------------------------------------------------------------------------------------
 
+"""
+@brief: Clase que representa a un agente.
+@param: unique_id: identificador único del agente.
+@param: model: modelo (HighwayModel).
+@param: initialLane: carril inicial.
+@param: fullyFunctional: booleano que indica si el agente es el que debe parar.
+
+@atribute speed: velocidad del agente.
+@atribute lane: carril del agente.
+@atribute functional: booleano que indica si el agente es el que debe parar.
+@atribute changedLane: booleano que indica si el agente cambió de carril.
+
+@method: getFrontEmptySpaces: obtiene los espacios vacíos delanteros.
+@method: getFrontVehicle: obtiene el vehículo delantero ( hasta 3 espacios).
+@method: whereToChange: Regresa coordenadas de la celda a la que se moverá el agente.
+@method: changeLane: Mueve el agente a la celda indicada (lo cambia de carril).
+@method: returnToLane: Mueve el agente a la celda indicada (lo regresa a su carril si anteriromente cambió).
+@method: step: Función que se ejecuta en cada paso de la simulación.
+"""
 
 class VehicleAgent(Agent):
 
@@ -190,6 +214,22 @@ class VehicleAgent(Agent):
 
 ##--------------------------------------------------------------------------------------------------
 
+"""
+@brief: Clase que representa al modelo.
+@param width: ancho del grid.
+@param height: alto del grid.
+
+@atribute movimientos : contador de steps.
+@atribute grid: grid del modelo.
+@atribute schedule: schedule del modelo (BaseScheduler).
+@atribute datacollector: datacollector del modelo (DataCollector).
+@atribute hasStopped: booleano que indica si el modelo ha detenido al agente 120.
+
+@method: step: Función que se ejecuta en cada paso de la simulación.
+
+@note:  El agente que se para es el 120, tarda 30 movimientos en llegar a la mitad del grid
+de esta forma este se para en el segundo 150 (la mitad de la simulación)
+"""
 
 class HighwayModel(Model):
 
@@ -219,3 +259,5 @@ class HighwayModel(Model):
         self.datacollector.collect(self)
         self.schedule.step()
         self.movimientos += 1
+
+##--------------------------------------------------------------------------------------------------
