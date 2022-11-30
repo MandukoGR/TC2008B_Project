@@ -13,12 +13,6 @@ from mesa.datacollection import DataCollector
 
 # Importamos los siguientes paquetes para el mejor manejo de valores numéricos.
 import numpy as np
-import pandas as pd
-
-# Definimos otros paquetes que vamos a usar para medir el tiempo de ejecución de nuestro algoritmo.
-import time
-import datetime
-
 
 ##--------------------------------------------------------------------------------------------------
 
@@ -35,9 +29,7 @@ def getGrid(model):
             grid[x][y] = 0
         else:
             grid[x][y] = content.unique_id
-
     return grid
-
 
 ##--------------------------------------------------------------------------------------------------
 
@@ -59,9 +51,6 @@ def getGrid(model):
 @method: changeLane: Mueve el agente a la celda indicada (lo cambia de carril).
 @method: returnToLane: Mueve el agente a la celda indicada (lo regresa a su carril si anteriromente cambió).
 @method: step: Función que se ejecuta en cada paso de la simulación.
-
-
-
 """
 class VehicleAgent(Agent):
 
@@ -71,6 +60,7 @@ class VehicleAgent(Agent):
         self.lane = initialLane
         self.functional = fullyFunctional
         self.changedLane = False
+
     def getFrontEmptySpaces(self):
         frontEmptySpaces = 0
         for i in range(1,4):
@@ -79,6 +69,7 @@ class VehicleAgent(Agent):
             else:
                 break
         return frontEmptySpaces
+
     def getFrontVehicle(self):
         frontVehicle = None
         for i in range(1,4):
@@ -86,6 +77,7 @@ class VehicleAgent(Agent):
                 frontVehicle = self.model.grid.get_cell_list_contents([(self.pos[0],self.pos[1]+i)])[0]
                 break
         return frontVehicle
+
     def whereToChange(self):
         rightLane = ()
         leftlane = ()
@@ -93,7 +85,6 @@ class VehicleAgent(Agent):
             rightLane = (self.pos[0]+1, self.pos[1])
         elif self.model.grid.is_cell_empty((self.pos[0]-1, self.pos[1])):
             leftlane = (self.pos[0]-1, self.pos[1])
-       
         if leftlane and rightLane:
             lane = np.random.choice([leftlane,rightLane])
             return lane
@@ -103,11 +94,12 @@ class VehicleAgent(Agent):
             return leftlane
         else:
             return self.pos
+
     def changeLane(self,laneToChange):
         self.model.grid.move_agent(self,laneToChange)
         self.lane = laneToChange[0]
         self.step()
-    
+
     def returnToLane(self):
         self.model.grid.move_agent(self,(1,self.pos[1]))
         self.changedLane = False
@@ -177,7 +169,6 @@ class VehicleAgent(Agent):
 de esta forma este se para en el segundo 150 (la mitad de la simulación)
 
 """
-
 class HighwayModel(Model):
 
     def __init__(self,width,height):
@@ -186,7 +177,7 @@ class HighwayModel(Model):
         self.grid = SingleGrid(width,height,False)
         self.schedule = BaseScheduler(self)
         self.datacollector = DataCollector(model_reporters={"Grid":getGrid})
-   
+
     def step(self):
         initialRail = np.random.choice([0,1,2])
         if self.numAgentsCreated != 120:
