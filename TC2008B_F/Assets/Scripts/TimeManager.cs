@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// time manager
+//utilizado con el TimeUI para ingresar el timepo que le 
+// toma al proyecto ejecutar las acciones establecidas, como
+// mostrar el carro que se detendra o cuanto timepo le toma a los
+//carros llegar al final del camino.
 public class TimeManager : MonoBehaviour
 {
 
@@ -13,7 +19,7 @@ public class TimeManager : MonoBehaviour
     public static int Hour { get; private set; }
 
     private float minuteToRealTime = 1f;
-    private float timer;
+    private float timer ;
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +35,14 @@ public class TimeManager : MonoBehaviour
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
+
             Minute++;
             OnMinuteChanged?.Invoke();
             if (Minute >= 60)
             {
                 Hour++;
                 OnHourChanged?.Invoke();
-                Minute = 0;
+                Minute = 0; 
             }
             timer = minuteToRealTime;
         }

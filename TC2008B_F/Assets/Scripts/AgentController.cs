@@ -7,21 +7,19 @@ using TMPro;
 public class AgentController : MonoBehaviour
 {
     // Start is called before the first frame update
+    //cars id
    public int id;
+   //posiciones de los carros
    public string position;
+
    public GameObject carsManager;
+
     void Start()
     {
+        //se obtiene la informacion de las cordenadas y es
+        //actualizado mediante invoke repeating
         carsManager = GameObject.Find("CarManager");
         InvokeRepeating("GetData", 1f, 0.99f);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-       // Invoke GetData every second
-
-         
     }
 
 
@@ -31,7 +29,8 @@ public class AgentController : MonoBehaviour
     }
     
     IEnumerator GetDataCoroutine(){
-        // Wait 5 seconds before doing a request
+        //se obtiene del servidor la posciicon exacta del carro mediante
+        // su id
         string uri = "http://localhost:8585/position?id=" + id;
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
@@ -51,14 +50,14 @@ public class AgentController : MonoBehaviour
                 position = position.TrimStart('[');
                 position = position.TrimEnd(']');
                 
-                // Only get x from position
+                // Solo se obtiene x de la posicion 
                 string[] positionArray = position.Split(',');
                 string x = positionArray[0];
                 x= x.TrimStart('{', '"', 'x', '"', ':');
                 x= x.TrimEnd(' ');
                 int positionX = int.Parse(x);
                 Debug.Log(positionX);
-
+                // Solo se obtiene y de la posicion
                 string z = positionArray[1];
                 z= z.TrimStart(' ','"', 'z', '"', ':');
                 z= z.TrimEnd(' ');
@@ -73,12 +72,10 @@ public class AgentController : MonoBehaviour
                 }
 
 
-                // Move car
                 Vector3 currentPosition = transform.position;
                 Vector3 targetPos = new Vector3(positionX , 5.81f, positionZ);
 
                
-                 // Move using Lerp
                 float timeElapsed = 0;
                 float timeToMove = 1f;
                 while (timeElapsed < timeToMove)
@@ -89,7 +86,6 @@ public class AgentController : MonoBehaviour
                 }
                 
 
-                // [{"x": 0, "z": 9, "y": 0, "val": 2.0}]
             }
         }
     }

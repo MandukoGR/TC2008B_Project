@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+//con Timew UI se demuestra el horario en el juego
+//del progreso de segundos y minutos
+
 public class TimeUI : MonoBehaviour
 {
 

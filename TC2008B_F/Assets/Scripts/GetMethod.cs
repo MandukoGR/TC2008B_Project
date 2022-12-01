@@ -11,6 +11,8 @@ public class GetMethod : MonoBehaviour
    public int id;
     void Start()
     {
+        //se actualizan los datos obtenidos del servidor
+        //cada segundo 
         Invoke("InitialRequest",1f);
         Invoke("InitialRequest",1f);
         InvokeRepeating("GetData", 1f, 1f);
@@ -29,7 +31,8 @@ public class GetMethod : MonoBehaviour
     {
         StartCoroutine(GetDataCoroutine());
     }
-    
+    // con get data couroutie se obtiene los datos del servidor de python mesa
+    // con unity web request podemos acceder a la informacion mediante URL
     IEnumerator GetDataCoroutine(){
         // Wait 5 seconds before doing a request
         string uri = "http://localhost:8585/step";
@@ -49,7 +52,7 @@ public class GetMethod : MonoBehaviour
             }
         }
     }
-
+    // esta es la request inicial del servidor
     IEnumerator InitialRequest(){
         string uri = "http://localhost:8585/step";
         // wait 1 second

@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Controles para las 5 camaras reparitidas en el juego
+
 public class CameraController : MonoBehaviour
 {
+    // se definen las camaras 
     public GameObject cam1;
     public GameObject cam2;
     public GameObject cam3;
@@ -11,9 +14,10 @@ public class CameraController : MonoBehaviour
     public GameObject cam5;
 
 
-    // Start is called before the first frame update
+    
     void Start()
     {
+        //al start se inicia la camara principal
         cam1.SetActive(true);
         cam2.SetActive(false);
         cam3.SetActive(false);
@@ -24,6 +28,9 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //con cada uno de los switches se activa las camaras 
+        // los numeros son relativos a las camaras
+
         if (Input.GetButtonDown("Switch1"))
         {
             cam1.SetActive(true);
