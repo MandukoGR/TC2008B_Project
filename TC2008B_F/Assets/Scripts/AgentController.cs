@@ -19,7 +19,7 @@ public class AgentController : MonoBehaviour
         //se obtiene la informacion de las cordenadas y es
         //actualizado mediante invoke repeating
         carsManager = GameObject.Find("CarManager");
-        InvokeRepeating("GetData", 1f, 0.99f);
+        InvokeRepeating("GetData", 0.9f, 1f);
     }
 
 
